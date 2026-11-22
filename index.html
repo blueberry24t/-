@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내신메이커 | 나만의 시험지</title>
+<style>
+:root{--ink:#20283b;--muted:#718096;--line:#e6eaf1;--bg:#f5f7fb;--blue:#5267d9;--blue2:#e9edff;--white:#fff;--green:#16845b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);padding:16px max(20px,calc((100% - 1050px)/2));display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:2}
+.logo{font-weight:850;font-size:20px;letter-spacing:-.7px}.logo span{color:var(--blue)}.tag{font-size:12px;color:var(--muted)}
+main{max-width:1000px;margin:36px auto;padding:0 20px}.hero{margin-bottom:26px}.eyebrow{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:1.3px}.hero h1{font-size:clamp(28px,5vw,42px);letter-spacing:-1.7px;margin:8px 0}.hero p{color:var(--muted);margin:0}
+.layout{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 5px 22px #27345b08}.panel h2{font-size:18px;margin:0 0 5px}.sub{font-size:13px;color:var(--muted);margin:0 0 18px}
+.upload{border:1.5px dashed #aab5d5;border-radius:14px;padding:25px 14px;text-align:center;background:#fafbff;cursor:pointer}.upload:hover{background:#f2f4ff}.upload .ico{font-size:30px}.upload strong{display:block;margin:8px}.upload small{color:var(--muted)}input[type=file]{display:none}
+.fileinfo{font-size:13px;color:var(--green);margin-top:10px;overflow-wrap:anywhere}
+.field{margin-top:19px}.field label,.label{font-weight:700;font-size:13px;display:block;margin-bottom:9px}.choice{display:flex;flex-wrap:wrap;gap:8px}.chip{border:1px solid var(--line);background:white;border-radius:10px;padding:9px 12px;font-size:13px;cursor:pointer;color:#536078}.chip.active{border-color:var(--blue);background:var(--blue2);color:#3448b9;font-weight:750}
+input[type=range]{width:100%;accent-color:var(--blue)}.rangehead{display:flex;justify-content:space-between;align-items:center}.rangeval{font-weight:800;color:var(--blue)}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:9px}.type{border:1px solid var(--line);border-radius:10px;padding:10px;font-size:13px;display:flex;gap:8px;align-items:center}.type input{accent-color:var(--blue)}
+.primary{border:0;background:var(--blue);color:#fff;border-radius:12px;padding:14px 18px;font-weight:800;font-size:15px;cursor:pointer;width:100%;margin-top:20px}.primary:hover{filter:brightness(.96)}.primary:disabled{opacity:.45;cursor:not-allowed}
+.note{background:#f7f8fc;border-radius:12px;padding:13px;font-size:12px;color:var(--muted);line-height:1.6;margin-top:14px}
+.status{font-size:13px;color:var(--muted);margin-top:12px;min-height:20px}
+#quiz{display:none;margin-top:20px}.quiztop{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:14px}.progress{height:7px;background:#edf0f6;border-radius:20px;overflow:hidden;margin:10px 0 20px}.progress div{height:100%;background:var(--blue);width:0}
+.qcard{background:white;border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:12px}.qnum{font-size:12px;color:var(--blue);font-weight:800}.qtext{font-size:17px;font-weight:750;line-height:1.6;margin:9px 0 16px}.answers{display:grid;gap:9px}.answer{border:1px solid var(--line);border-radius:10px;padding:12px;text-align:left;background:#fff;cursor:pointer;font-size:14px;color:var(--ink)}.answer.selected{border-color:var(--blue);background:var(--blue2)}.answer.correct{border-color:#42a77e;background:#effaf5}.answer.wrong{border-color:#dc7777;background:#fff3f3}.explain{display:none;background:#f7f8fc;border-radius:10px;padding:12px;font-size:13px;line-height:1.65;margin-top:12px}.result{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;text-align:center}.score{font-size:42px;font-weight:900;color:var(--blue)}
+footer{text-align:center;color:#98a1b3;font-size:12px;padding:35px 15px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}main{margin:24px auto}.panel{padding:18px}}
+</style>
+</head>
+<body>
+<header><div class="logo">내신<span>메이커</span></div><div class="tag">MY PRINT · MY TEST</div></header>
+<main>
+ <section class="hero"><div class="eyebrow">PERSONAL EXAM BUILDER</div><h1>내 프린트가 나만의 시험지가 된다.</h1><p>학습 자료를 올리고 원하는 조건을 설정해 나만의 문제를 만들어 보세요.</p></section>
+ <section class="layout" id="setup">
+  <div class="panel">
+   <h2>01. 학습 자료 업로드</h2><p class="sub">시험 범위가 담긴 PDF 또는 사진을 선택하세요.</p>
+   <label class="upload" for="files"><div class="ico">📄</div><strong>파일을 선택하거나 여기에 놓으세요</strong><small>PDF · JPG · PNG · 여러 장 선택 가능</small></label>
+   <input id="files" type="file" accept=".pdf,image/png,image/jpeg" multiple>
+   <div class="fileinfo" id="fileinfo">아직 업로드된 파일이 없습니다.</div>
+   <div class="field"><label>과목명 (선택)</label><input id="subject" placeholder="예: 한국지리, 법과 사회" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:10px"></div>
+   <div class="note">현재 버전은 업로드 파일을 선택하고 시험 설정을 체험하는 시제품입니다. 실제 PDF·사진의 내용을 읽고 AI가 자료 기반 문제를 출제하는 기능은 AI 서버 연결이 추가로 필요합니다.</div>
+  </div>
+  <div class="panel">
+   <h2>02. 출제 조건 설정</h2><p class="sub">원하는 시험 스타일을 자유롭게 선택하세요.</p>
+   <div class="field"><div class="rangehead"><label for="count">문제 수</label><span class="rangeval" id="countVal">10문항</span></div><input id="count" type="range" min="5" max="30" step="5" value="10"></div>
+   <div class="field"><label>난이도</label><div class="choice" id="difficulty"><button class="chip" data-v="1">1 쉬움</button><button class="chip active" data-v="2">2 보통</button><button class="chip" data-v="3">3 중상</button><button class="chip" data-v="4">4 어려움</button><button class="chip" data-v="5">5 최상</button></div></div>
+   <div class="field"><label>문제 유형 (복수 선택 가능)</label><div class="types" id="types">
+    <label class="type"><input type="checkbox" value="객관식 5지선다" checked> 5지선다형</label>
+    <label class="type"><input type="checkbox" value="OX"> OX형</label>
+    <label class="type"><input type="checkbox" value="단답형"> 단답형</label>
+    <label class="type"><input type="checkbox" value="빈칸 채우기"> 빈칸 채우기</label>
+    <label class="type"><input type="checkbox" value="서술형"> 서술형</label>
+    <label class="type"><input type="checkbox" value="자료 분석형"> 자료 분석형</label>
+   </div></div>
+   <button class="primary" id="make">시험지 미리보기 만들기 →</button><div class="status" id="status"></div>
+  </div>
+ </section>
+ <section id="quiz">
+  <div class="quiztop"><div><b id="quiztitle">실전 모의고사</b><div class="sub" id="quizmeta" style="margin:4px 0 0"></div></div><button class="chip" id="back">설정으로</button></div>
+  <div class="progress"><div id="bar"></div></div><div id="questions"></div>
+  <button class="primary" id="submit">답안 제출 및 채점</button><div id="result"></div>
+ </section>
+</main>
+<footer>내신메이커 · 나만의 학습 자료로 만드는 맞춤형 시험</footer>
+<script>
+const $=s=>document.querySelector(s);let difficulty=2,questions=[],submitted=false;
+$('#files').addEventListener('change',e=>{let f=[...e.target.files];$('#fileinfo').textContent=f.length?f.map(x=>`✓ ${x.name} (${(x.size/1024/1024).toFixed(2)}MB)`).join(' · '):'아직 업로드된 파일이 없습니다.'});
+$('#count').addEventListener('input',e=>$('#countVal').textContent=e.target.value+'문항');
+$('#difficulty').addEventListener('click',e=>{let b=e.target.closest('button');if(!b)return;difficulty=+b.dataset.v;document.querySelectorAll('#difficulty .chip').forEach(x=>x.classList.toggle('active',x===b))});
+$('#make').onclick=()=>{
+ let types=[...document.querySelectorAll('#types input:checked')].map(x=>x.value);
+ if(!types.length){$('#status').textContent='문제 유형을 하나 이상 선택해 주세요.';return}
+ let files=$('#files').files;
+ if(!files.length){$('#status').textContent='먼저 PDF 또는 사진 파일을 선택해 주세요.';return}
+ $('#status').textContent='설정이 적용된 시험지 미리보기를 준비하고 있어요.';
+ let n=+$('#count').value;
+ questions=Array.from({length:n},(_,i)=>({type:types[i%types.length],text:`[미리보기 ${i+1}] 업로드한 학습 자료에서 핵심 개념을 확인하는 문제가 이 위치에 생성됩니다.`,opts:['개념의 정의와 특징을 정확히 이해한다.','관련 개념을 서로 혼동하여 설명한다.','자료에 제시되지 않은 내용을 정답으로 선택한다.','핵심 원인과 결과를 반대로 해석한다.','개념과 무관한 내용을 연결한다.'],answer:0,explain:'실제 AI 연동 후 업로드한 자료의 해당 개념과 페이지를 근거로 정답 및 해설이 표시됩니다.',user:null}));
+ $('#setup').style.display='none';$('#quiz').style.display='block';$('#quiztitle').textContent=($('#subject').value||'나만의')+' 실전 모의고사';$('#quizmeta').textContent=`${n}문항 · 난이도 ${difficulty}/5 · ${types.join(', ')}`;
+ submitted=false;$('#result').innerHTML='';$('#submit').style.display='block';render();window.scrollTo(0,0);
+};
+function render(){let wrap=$('#questions');wrap.innerHTML='';questions.forEach((q,i)=>{let card=document.createElement('div');card.className='qcard';card.innerHTML=`<div class="qnum">QUESTION ${String(i+1).padStart(2,'0')} · ${q.type}</div><div class="qtext">${q.text}</div><div class="answers">${q.opts.map((o,j)=>`<button class="answer ${q.user===j?'selected':''}" data-i="${i}" data-j="${j}">${j+1}. ${o}</button>`).join('')}</div><div class="explain" id="exp${i}">${q.explain}</div>`;wrap.append(card)});wrap.querySelectorAll('.answer').forEach(b=>b.onclick=()=>{if(submitted)return;questions[+b.dataset.i].user=+b.dataset.j;render();$('#bar').style.width=(questions.filter(q=>q.user!==null).length/questions.length*100)+'%'})}
+$('#submit').onclick=()=>{if(submitted)return;let unanswered=questions.filter(q=>q.user===null).length;if(unanswered&&!confirm(`${unanswered}문항을 답하지 않았어요. 제출할까요?`))return;submitted=true;let score=questions.filter(q=>q.user===q.answer).length;questions.forEach((q,i)=>{let card=$('.qcard:nth-child('+(i+1)+')');card.querySelectorAll('.answer').forEach((b,j)=>{b.disabled=true;if(j===q.answer)b.classList.add('correct');else if(j===q.user)b.classList.add('wrong')});card.querySelector('.explain').style.display='block'});$('#submit').style.display='none';$('#result').innerHTML=`<div class="result"><div>시험 결과</div><div class="score">${score}/${questions.length}</div><b>${Math.round(score/questions.length*100)}점</b><p style="color:#718096;font-size:13px">현재는 기능 시연용 예시 문항으로 채점됩니다.</p><button class="primary" onclick="location.reload()">새 시험 만들기</button></div>`;$('#bar').style.width='100%';$('#result').scrollIntoView({behavior:'smooth'})};
+$('#back').onclick=()=>{if(confirm('설정 화면으로 돌아갈까요?'))location.reload()};
+</script>
+</body></html>
